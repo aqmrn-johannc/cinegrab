@@ -8,3 +8,249 @@
     padding: 20px;
     border-radius: 10px;
 }
+
+.background-image {
+    background-image: url('/public/images/bgimage.png'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    min-height: 100vh;  
+}
+
+.tooltip-container {
+    overflow: visible;
+}
+
+
+.card-1 {
+    background-image: url('/public/images/card1.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-1:hover {
+
+    box-shadow: 0px 0px 30px rgba(229, 1, 1, 1);
+    
+}
+
+.card-2 {
+    background-image: url('/public/images/card2.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-2:hover {
+
+    box-shadow: 0px 0px 30px rgb(255, 0, 238);
+    
+}
+
+.card-3 {
+    background-image: url('/public/images/card3.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-3:hover {
+
+    box-shadow: 0px 0px 30px rgb(221, 255, 0);
+    
+}
+
+.card-4 {
+    background-image: url('/public/images/card4.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-4:hover {
+
+    box-shadow: 0px 0px 30px rgba(229, 1, 1, 1);
+    
+}
+
+.card-5 {
+    background-image: url('/public/images/card5.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-5:hover {
+
+    box-shadow: 0px 0px 30px rgb(36, 40, 255);
+    
+}
+
+.card-6 {
+    background-image: url('/public/images/card6.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-6:hover {
+
+    box-shadow: 0px 0px 30px rgb(255, 187, 0);
+    
+}
+
+.card-7 {
+    background-image: url('/public/images/card7.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-7:hover {
+
+    box-shadow: 0px 0px 30px rgb(233, 233, 233);
+    
+}
+
+.card-8 {
+    background-image: url('/public/images/card8.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-8:hover {
+
+    box-shadow: 0px 0px 30px rgb(33, 177, 255);
+    
+}
+
+.card-9 {
+    background-image: url('/public/images/card9.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 100%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.card-9:hover {
+
+    box-shadow: 0px 0px 30px rgb(239, 55, 208);
+    
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.9); /* Dark background for contrast */
+    border-radius: 8px;
+    border-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    left: 50%; /* Center horizontally */
+    bottom: 30%; /* Position it above the card */
+    transform: translateX(-50%); /* Center the tooltip */
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+    width: 70%;
+}
+
+.tooltip-text {
+    max-width: 260px; /* Adjust width as needed */
+    color: #fff; /* Light text */
+    text-align: center;
+    padding: 20px; /* Padding for better spacing */
+    font-size: 15px; /* Readable font size */
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    top: 100%; /* Adjust arrow to bottom of the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(50, 50, 50, 0.9) transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.group:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+
