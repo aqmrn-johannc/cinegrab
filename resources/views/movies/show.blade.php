@@ -52,14 +52,16 @@
                             <div class="{{ $cardClass }} h-100 w-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"></div>
                         </div>
 
-                        <div class="md:ml-8 md:w-2/3 mt-8 md:mt-0">  
+        
+                        <div class="md:ml-8 md:w-2/3 mt-8 md:mt-0"> 
                             <h1 class="text-4xl font-bold mb-6">{{ $movie->title }}</h1>
                             <p><strong>Genre:</strong> {{ $movie->genre }}</p>
                             <p><strong>Director:</strong> {{ $movie->director }}</p>
                             <p><strong>Duration:</strong> {{ $movie->duration }} minutes</p>
                             <p><strong>Release Date:</strong> {{ $movie->release_date->format('F d, Y') }}</p>
                             <p><strong>Rating:</strong> {{ $movie->rating }}</p>
-                            <p><strong>Description:</strong> {{ $movie->description }}</p>
+                            
+                            <p class="text-xl mt-28"><strong>Synopsis </br></strong> {{ $movie->description }}</p>
                         </div>
 
                     </div>     
