@@ -1,12 +1,32 @@
 <x-app-layout>
-
     @if(Auth::check())
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Hi there, {{ Auth::user()->name }}!
-            </h2>
-        </x-slot>
-    @else
+        <h2 class="text-3xl font-bold mb-6 text-center text-white">Your Reservations</h2>
+
+        {{-- Success message --}}
+        @if(session('success'))
+            <div class="bg-green-500 text-white text-center p-3 mb-4 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr>
+                    <th class="border text-left p-2 text-white">Order ID</th>
+                    <th class="border text-left p-2 text-white">Seat</th>
+                    <th class="border text-left p-2 text-white">Movie Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(Auth::user()->reservations as $reservation)
+                    <tr class="bg-gray-800"> 
+                        <td class="border p-2 text-white">{{ $reservation->order_number }}</td>
+                        <td class="border p-2 text-white">{{ $reservation->seat }}</td>
+                        <td class="border p-2 text-white">{{ $reservation->movie->title }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @endif
 
     @if(!Auth::check())

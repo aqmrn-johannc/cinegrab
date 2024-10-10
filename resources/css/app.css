@@ -211,20 +211,6 @@
     
 }
 
-.tooltip {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.9); /* Dark background for contrast */
-    border-radius: 8px;
-    border-color: rgb(255, 255, 255);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-    left: 50%; /* Center horizontally */
-    bottom: 30%; /* Position it above the card */
-    transform: translateX(-50%); /* Center the tooltip */
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s ease;
-    width: 70%;
-}
 
 .tooltip-text {
     max-width: 260px; /* Adjust width as needed */
@@ -248,6 +234,17 @@
 
 /* Show tooltip on hover */
 .group:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.relative:hover .tooltip {
     visibility: visible;
     opacity: 1;
 }
