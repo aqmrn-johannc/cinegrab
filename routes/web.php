@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ReservationController;
 use App\Models\Movie;
 
 /*
@@ -26,6 +27,8 @@ Route::get('/', function () {
 
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
 
+Route::get('/reservation/{movie}', [ReservationController::class, 'show'])->name('movies.reservation');
+
 Route::get('/dashboard', function () {
     // Fetch movies from the database
     $movies = Movie::all();
@@ -33,6 +36,8 @@ Route::get('/dashboard', function () {
     // Pass movies to the view
     return view('dashboard', compact('movies'));
 })->name('dashboard');
+
+Route::post('/reserve', [ReservationController::class, 'reserve'])->name('reservation.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
