@@ -249,5 +249,179 @@
     opacity: 1;
 }
 
+/* smol card */
 
+
+.small-card-1 {
+    background-image: url('/public/images/card1.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-2 {
+    background-image: url('/public/images/card2.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-3 {
+    background-image: url('/public/images/card3.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%;  
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-4 {
+    background-image: url('/public/images/card4.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-5 {
+    background-image: url('/public/images/card5.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-6 {
+    background-image: url('/public/images/card6.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.small-card-7 {
+    background-image: url('/public/images/card7.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.small-card-8 {
+    background-image: url('/public/images/card8.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+
+.small-card-9 {
+    background-image: url('/public/images/card9.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    aspect-ratio: 3 / 4; 
+    width: 60%; 
+    max-width: 300px;
+    margin: auto;
+    border-radius: 10px; 
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.8);
+}
+
+.reservations-container {
+    height: 700px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding-right: 10px; /* Optional: for better visibility of scrollbar */
+}
+
+.movies-container {
+    height: 700px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding-right: 10px; /* Optional: for better visibility of scrollbar */
+}
+
+html, body {
+    height: 100%; /* Set the height to 100% */
+    margin: 0; /* Remove default margin */
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Container for the app layout */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling within this container */
+}
+
+/* Main content area */
+.main-content {
+    flex: 1; /* Take up remaining space */
+    overflow: auto; /* Allow scrolling only on this section */
+}
 

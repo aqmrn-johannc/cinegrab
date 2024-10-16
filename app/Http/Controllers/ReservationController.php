@@ -2,47 +2,87 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Seat;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Reservation;
-use Illuminate\Support\Str;
 
 class ReservationController extends Controller
 {
+    public function show($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $seats = Seat::where('movie_id', $movie->id)->get();
 
-    public function show($movie)
-    {
-        $seats = Seat::all();
-        $movie = Movie::find($movie);  
-        return view('movies.reservation', compact('movie','seats'));  
+        return view('movies.reservation', compact('movie', 'seats'));
     }
-    public function reserve(Request $request)
+
+    public function store(Request $request)
     {
-        $request->validate([
-            'seat' => 'required|string|exists:seats,seat_number',
+        $validatedData = $request->validate([
+            'movie_id' => 'required|exists:movies,id',
+            'seat' => 'required',
+            'time_slot' => 'required|in:09:00,12:00,15:00',
         ]);
 
-        $seat = Seat::where('seat_number', $request->seat)->first();
-        if ($seat) {
-            $seat->is_booked = true;
-            $seat->save();
+        $movie = Movie::find($validatedData['movie_id']);
+        $seat = Seat::where('movie_id', $validatedData['movie_id'])
+                    ->where('seat_number', $validatedData['seat'])
+                    ->where('time_slot', $validatedData['time_slot'])
+                    ->first();
 
-            // Create a reservation (make sure you have a Reservation model)
-            $reservation = new Reservation();
-            $reservation->user_id = auth()->id();
-            $reservation->user_name = auth()->user()->name; // Add user's name here
-            $reservation->order_number = Str::random(7); // Generate a random order number
-            $reservation->seat = $seat->seat_number;
-            $reservation->movie_id = $request->movie_id; // Make sure to include the movie_id
-            $reservation->save();
-
-            return redirect()->route('dashboard')->with('success', 'Reservation Added!');
+        if ($seat->is_booked) {
+            return back()->withErrors(['seat' => 'The seat is already booked.']);
         }
 
-        return redirect()->back()->with('error', 'Failed to reserve the seat.');
+        $seat->update(['is_booked' => true]);
+
+        $orderNumber = 'ORD-' . Str::random(10);
+
+        Reservation::create([
+            'movie_id' => $validatedData['movie_id'],
+            'seat_number' => $validatedData['seat'],
+            'time_slot' => $validatedData['time_slot'],
+            'user_id' => auth()->id(),
+            'order_number' => $orderNumber,
+            'price' => $movie->price,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Seat reserved successfully!');
     }
 
+    public function getSeatsForTimeSlot($movieId, $timeSlot)
+    {
+        $seats = Seat::where('movie_id', $movieId)
+                    ->where('time_slot', $timeSlot)
+                    ->get();
+
+        return response()->json(['seats' => $seats]);
+    }
+
+    public function destroy($id)
+    {
+        $reservation = Reservation::find($id);
+
+        if ($reservation) {
+            $seat = Seat::where('movie_id', $reservation->movie_id)
+                        ->where('seat_number', $reservation->seat_number)
+                        ->first();
+
+            if ($seat) {
+                $seat->is_booked = false;
+                $seat->save();
+            }
+
+            $reservation->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
 
 
 }

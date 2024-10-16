@@ -10,10 +10,12 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name'); // Name of the user
-            $table->string('order_number')->unique(); // Order number
-            $table->string('seat'); // The seat reserved
-            $table->foreignId('movie_id')->constrained()->onDelete('cascade'); // Foreign key for movies
+            $table->foreignId('movie_id')->constrained()->onDelete('cascade');
+            $table->string('seat_number');
+            $table->enum('time_slot', ['09:00', '12:00', '15:00']); // Time slot column
+            $table->string('order_number')->nullable();
+            $table->string('user_name')->nullable(); // Make sure to include this line
+            $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
         });
     }

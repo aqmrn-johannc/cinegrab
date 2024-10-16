@@ -1,20 +1,16 @@
-<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-
+<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 sticky top-0 z-10 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-
             <div class="flex">
-   
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset('images/cinegrablogo.png') }}" style="width:200px; height: auto; margin-top:30px;"> />
+                        <img src="{{ asset('images/cinegrablogo.png') }}" style="width:200px; height: auto; margin-top:10px;" />
                     </a>
                 </div>
             </div>
 
             <div class="flex items-center">
                 @if(Auth::check())
-      
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -53,7 +49,6 @@
                     </div>
                 @endif
             </div>
-
         </div>
     </div>
 </nav>
