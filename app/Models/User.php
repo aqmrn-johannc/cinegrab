@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'banned_until',
     ];
 
     public function reservations()
@@ -47,5 +48,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'banned_until' => 'datetime',
     ];
 }

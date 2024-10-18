@@ -51,6 +51,10 @@ Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name
 
 Route::get('/admin/dashboard', [ReservationController::class, 'adminDashboard'])->middleware('auth')->name('admin.dashboard');
 
+Route::post('/ban-user/{id}', [ReservationController::class, 'banUser'])->middleware('auth');
+
+Route::post('/unban-user/{id}', [ReservationController::class, 'unbanUser'])->middleware('auth');
+
 
 
 

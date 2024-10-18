@@ -18,6 +18,7 @@ class Movie extends Model
         'duration',
         'release_date',
         'rating',
+        'trailer_filename',
     ];
 
     protected $casts = [

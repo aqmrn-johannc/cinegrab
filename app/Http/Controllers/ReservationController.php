@@ -103,14 +103,15 @@ class ReservationController extends Controller
     public function adminDashboard()
     {
         $reservations = Reservation::with(['movie', 'user'])->get(); // Fetch reservations with movie and user details
-        $users = User::where('email', '!=', 'admin123@gmail.com')->get(); // Exclude the admin account
+
+        // Fetch users along with their reservations, excluding the admin account
+        $users = User::with('reservations')->where('email', '!=', 'admin123@gmail.com')->get(); 
 
         $totalReservations = $reservations->count(); // Count total reservations
         $totalUsers = $users->count(); // Count total users
 
         return view('admin.dashboard', compact('reservations', 'users', 'totalReservations', 'totalUsers'));
     }
-
 
 
     public function edit($id)
@@ -165,5 +166,32 @@ class ReservationController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Reservation updated successfully!');
     }
 
+    public function banUser(Request $request, $id)
+    {
+        $request->validate([
+            'duration' => 'required|integer|min:1',
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = User::findOrFail($id);
+        
+        // Set the banned_until time
+        $user->banned_until = now()->addMinutes($request->duration);
+        $user->ban_reason = $request->reason;
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+    public function unbanUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Remove the ban
+        $user->banned_until = null; // Set banned_until to null
+        $user->ban_reason = null; // Optionally clear the ban reason
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
 
 }

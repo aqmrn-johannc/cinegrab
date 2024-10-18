@@ -1,4 +1,46 @@
 <x-app-layout>
+    @if(auth()->check())
+        @if(auth()->user()->banned_until && now()->isBefore(auth()->user()->banned_until))
+            <div class="flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
+
+                <img src="{{ asset('images/ban.png') }}" alt="Banned" class="mb-5" style="max-width: 100px;">
+
+                <h1 class="text-6xl font-bold mb-4 text-red-500">You Are Temporarily Banned</h1>
+                
+                <!-- Display the ban reason -->
+                <p class="text-4xl text-white mb-4">
+                    Reason: {{ auth()->user()->ban_reason ?? 'No reason specified.' }}
+                </p>
+
+                <p class="text-2xl text-white">Time remaining: <span id="countdown"></span></p>
+            </div>
+
+            <script>
+                // Convert PHP date to ISO format for JavaScript compatibility
+                const bannedUntil = new Date("{{ \Carbon\Carbon::parse(auth()->user()->banned_until)->toIso8601String() }}").getTime();
+
+                console.log("Banned Until Time (ms):", bannedUntil); // Debugging: Ensure correct time is passed to JS
+
+                const countdown = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = bannedUntil - now;
+
+                    if (distance < 0) {
+                        clearInterval(countdown);
+                        window.location.href = "{{ route('dashboard') }}"; // Redirect to user dashboard
+                    } else {
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        document.getElementById("countdown").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+                    }
+                }, 1000);
+            </script>
+        @endif
+    @else
+        <div>Please log in to view your account details.</div>
+    @endif
+
     <div class="flex py-12" style="background-image: url('/images/bgimage.png'); background-size: cover; background-position: center;">
 
         <div class="w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg mr-6 sticky top-0"> 
