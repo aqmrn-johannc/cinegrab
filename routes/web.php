@@ -24,6 +24,12 @@ Route::get('/', function () {
     return view('dashboard', compact('movies'));
 });
 
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard'); 
+})->name('admin.dashboard')->middleware('auth'); 
+
+Route::get('/admin/dashboard', [ReservationController::class, 'adminDashboard'])->middleware('auth')->name('admin.dashboard');
+
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
 
 Route::get('/dashboard', [ReservationController::class, 'index'])->name('dashboard');
@@ -32,19 +38,25 @@ Route::get('/reservation/{movie}', [ReservationController::class, 'show'])->name
 
 Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
 
+Route::get('/checkout', [ReservationController::class, 'checkout'])->name('checkout');
+
 Route::get('/reservations/export', [ReservationExportController::class, 'export'])->middleware('auth')->name('reservations.export');
 
 Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
 Route::get('/movies/{movie}/seats/{time_slot}', [ReservationController::class, 'getSeatsForTimeSlot']);
 
+Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit')->middleware('auth');
+Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update')->middleware('auth');
+
+Route::get('/admin/dashboard', [ReservationController::class, 'adminDashboard'])->middleware('auth')->name('admin.dashboard');
+
+
 
 
 Route::get('/dashboard', function () {
-    // Fetch movies from the database
     $movies = Movie::all();
 
-    // Pass movies to the view
     return view('dashboard', compact('movies'));
 })->name('dashboard');
 

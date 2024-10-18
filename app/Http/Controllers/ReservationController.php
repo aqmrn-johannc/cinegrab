@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Reservation;
+use App\Models\User;
 
 class ReservationController extends Controller
 {
@@ -68,8 +69,10 @@ class ReservationController extends Controller
         $reservation = Reservation::find($id);
 
         if ($reservation) {
+  
             $seat = Seat::where('movie_id', $reservation->movie_id)
                         ->where('seat_number', $reservation->seat_number)
+                        ->where('time_slot', $reservation->time_slot) 
                         ->first();
 
             if ($seat) {
@@ -82,6 +85,84 @@ class ReservationController extends Controller
         }
 
         return response()->json(['success' => false], 404);
+    }
+
+
+    public function checkout(Request $request)
+    {
+        $movie_id = $request->input('movie_id');
+        $time_slot = $request->input('time_slot');
+        $seat = $request->input('seat');
+        $price = $request->input('price');
+        $title = $request->input('title');
+
+        return view('movies.checkout', compact('movie_id', 'time_slot', 'seat', 'price', 'title'));
+    }
+
+
+    public function adminDashboard()
+    {
+        $reservations = Reservation::with(['movie', 'user'])->get(); // Fetch reservations with movie and user details
+        $users = User::where('email', '!=', 'admin123@gmail.com')->get(); // Exclude the admin account
+
+        $totalReservations = $reservations->count(); // Count total reservations
+        $totalUsers = $users->count(); // Count total users
+
+        return view('admin.dashboard', compact('reservations', 'users', 'totalReservations', 'totalUsers'));
+    }
+
+
+
+    public function edit($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $movie = Movie::findOrFail($reservation->movie_id); // Assuming you have a movie_id in the reservation
+
+        return view('admin.edit', compact('reservation', 'movie'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'time_slot' => 'required|in:09:00,12:00,15:00',
+            'seat' => 'required',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+        $oldSeat = Seat::where('movie_id', $reservation->movie_id)
+                    ->where('seat_number', $reservation->seat_number)
+                    ->where('time_slot', $reservation->time_slot)
+                    ->first();
+
+        // If the seat is being changed, mark the old seat as available
+        if ($reservation->seat_number !== $validatedData['seat']) {
+            $oldSeat->is_booked = false;
+            $oldSeat->save();
+            
+            // Check if the new seat is booked
+            $newSeat = Seat::where('movie_id', $reservation->movie_id)
+                        ->where('seat_number', $validatedData['seat'])
+                        ->where('time_slot', $validatedData['time_slot'])
+                        ->first();
+
+            if ($newSeat && $newSeat->is_booked) {
+                return back()->withErrors(['seat' => 'The new seat is already booked.']);
+            }
+
+            // Update the new seat to booked
+            if ($newSeat) {
+                $newSeat->is_booked = true;
+                $newSeat->save();
+            }
+        }
+
+        // Update reservation details
+        $reservation->update([
+            'time_slot' => $validatedData['time_slot'],
+            'seat_number' => $validatedData['seat'],
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Reservation updated successfully!');
     }
 
 

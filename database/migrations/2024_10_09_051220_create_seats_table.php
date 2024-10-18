@@ -10,12 +10,11 @@ class CreateSeatsTable extends Migration
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('movie_id'); // To link the seat to a movie
+            $table->unsignedBigInteger('movie_id');
             $table->string('seat_number');
             $table->boolean('is_booked')->default(false);
             $table->timestamps();
 
-            // Foreign key reference to movies table
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
         });
     }

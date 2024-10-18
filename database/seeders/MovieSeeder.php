@@ -17,7 +17,7 @@ class MovieSeeder extends Seeder
             'duration' => '127',
             'release_date' => '2024-7-25',
             'rating' => 'R',
-            'price' => 250.00, // Added price
+            'price' => 250.00, 
         ]);
 
         Movie::create([
@@ -28,7 +28,7 @@ class MovieSeeder extends Seeder
             'duration' => 96,
             'release_date' => '2024-6-14',
             'rating' => 'PG',
-            'price' => 220.00, // Added price
+            'price' => 220.00, 
         ]);
 
         Movie::create([
@@ -39,7 +39,7 @@ class MovieSeeder extends Seeder
             'duration' => 94,
             'release_date' => '2024-7-3',
             'rating' => 'PG',
-            'price' => 200.00, // Added price
+            'price' => 200.00, 
         ]);
 
         Movie::create([
@@ -50,7 +50,7 @@ class MovieSeeder extends Seeder
             'duration' => 119,
             'release_date' => '2024-8-15',
             'rating' => 'R',
-            'price' => 300.00, // Added price
+            'price' => 300.00,
         ]);
 
         Movie::create([
@@ -61,7 +61,7 @@ class MovieSeeder extends Seeder
             'duration' => 104,
             'release_date' => '2024-9-20',
             'rating' => 'PG',
-            'price' => 280.00, // Added price
+            'price' => 280.00,
         ]);
 
         Movie::create([
@@ -72,7 +72,7 @@ class MovieSeeder extends Seeder
             'duration' => 102,
             'release_date' => '2024-9-27',
             'rating' => 'PG',
-            'price' => 150.00, // Added price
+            'price' => 150.00, 
         ]);
 
         Movie::create([
@@ -83,7 +83,7 @@ class MovieSeeder extends Seeder
             'duration' => 110,
             'release_date' => '2024-9-13',
             'rating' => 'R',
-            'price' => 350.00, // Added price
+            'price' => 350.00,
         ]);
 
         Movie::create([
@@ -94,7 +94,7 @@ class MovieSeeder extends Seeder
             'duration' => 115,
             'release_date' => '2024-6-7',
             'rating' => 'R',
-            'price' => 300.00, // Added price
+            'price' => 300.00, 
         ]);
 
         Movie::create([
@@ -105,7 +105,7 @@ class MovieSeeder extends Seeder
             'duration' => 131,
             'release_date' => '2024-8-9',
             'rating' => 'PG-13',
-            'price' => 250.00, // Added price
+            'price' => 250.00,
         ]);
     }
 }

@@ -10,9 +10,9 @@ class SeatSeeder extends Seeder
 {
     public function run()
     {
-        $rows = range('A', 'J');  // Rows A-J
-        $columns = range(1, 10);  // Columns 1-10
-        $time_slots = ['09:00', '12:00', '15:00'];  // Time slots
+        $rows = range('A', 'J'); 
+        $columns = range(1, 10); 
+        $time_slots = ['09:00', '12:00', '15:00']; 
 
         $movies = Movie::all();
 

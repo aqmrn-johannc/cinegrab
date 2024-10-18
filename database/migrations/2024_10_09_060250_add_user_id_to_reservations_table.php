@@ -9,7 +9,7 @@ class AddUserIdToReservationsTable extends Migration
     public function up()
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->after('id'); // Adds user_id column
+            $table->foreignId('user_id')->constrained()->after('id'); 
         });
     }
 

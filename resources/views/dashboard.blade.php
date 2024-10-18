@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex py-12" style="background-image: url('/images/bgimage.png'); background-size: cover; background-position: center;">
 
-        <div class="w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg mr-6 sticky top-0"> <!-- Added sticky class and top -->
+        <div class="w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg mr-6 sticky top-0"> 
             @if(Auth::check())
                 <h2 class="text-3xl font-bold mb-6 text-center text-white">Your Reservations ({{ Auth::user()->reservations->count() }})</h2>
 
@@ -19,8 +19,8 @@
                     </div>
                 @endif
         
-                <!-- Scrollable Container for Reservations -->
-                <div class="reservations-container h-80 overflow-y-auto space-y-4"> <!-- Added class here -->
+
+                <div class="reservations-container h-80 overflow-y-auto space-y-4">
                     @if(Auth::user()->reservations->isEmpty())
                         <div class="bg-gray-700 p-4 rounded-lg shadow-md text-center text-gray-300">
                             You don't have any reservations as of the moment.
@@ -66,8 +66,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <h2 class="text-5xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">NOW SHOWING</h2>
                 
-                <!-- Scrollable Container for Movies -->
-                <div class="movies-container h-80 overflow-y-auto space-y-4"> <!-- Set max height and enable scrolling -->
+        
+                <div class="movies-container h-80 overflow-y-auto space-y-4"> 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         @foreach($movies as $movie)
                             <a href="{{ route('movies.show', $movie->id) }}" class="flex flex-col items-center group relative">
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
+ 
     <div id="cancelConfirmationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg text-center">
             <h3 class="text-lg font-semibold mb-4">Are you sure you want to cancel this reservation?</h3>
@@ -96,7 +96,7 @@
         let reservationIdToCancel;
     
         function confirmCancel(reservationId) {
-            reservationIdToCancel = reservationId; // Store the ID to cancel
+            reservationIdToCancel = reservationId;
             document.getElementById('cancelConfirmationModal').classList.remove('hidden');
         }
     
@@ -114,9 +114,9 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Optional: Display a success message
+                 
                     alert('Reservation cancelled successfully.');
-                    location.reload(); // Reload the page to reflect changes
+                    location.reload(); 
                 } else {
                     alert('Failed to cancel reservation. Please try again.');
                 }

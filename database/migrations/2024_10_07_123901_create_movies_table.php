@@ -14,15 +14,15 @@ class CreateMoviesTable extends Migration
     public function up()
     {
         Schema::create('movies', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->string('title'); // Movie title
-            $table->text('description'); // Movie description
-            $table->string('genre'); // Genre (e.g., Action, Comedy)
-            $table->string('director')->nullable(); // Director's name
-            $table->integer('duration'); // Duration in minutes
-            $table->date('release_date'); // Release date
-            $table->string('rating')->nullable(); // Rating (e.g., PG-13, R)
-            $table->timestamps(); // Created at and updated at
+            $table->id(); 
+            $table->string('title'); 
+            $table->text('description'); 
+            $table->string('genre'); 
+            $table->string('director')->nullable(); 
+            $table->integer('duration'); 
+            $table->date('release_date'); 
+            $table->string('rating')->nullable(); 
+            $table->timestamps();
         });
     }
 

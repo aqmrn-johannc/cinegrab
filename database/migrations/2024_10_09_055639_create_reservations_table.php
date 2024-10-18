@@ -12,9 +12,9 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->foreignId('movie_id')->constrained()->onDelete('cascade');
             $table->string('seat_number');
-            $table->enum('time_slot', ['09:00', '12:00', '15:00']); // Time slot column
+            $table->enum('time_slot', ['09:00', '12:00', '15:00']); 
             $table->string('order_number')->nullable();
-            $table->string('user_name')->nullable(); // Make sure to include this line
+            $table->string('user_name')->nullable(); 
             $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
         });

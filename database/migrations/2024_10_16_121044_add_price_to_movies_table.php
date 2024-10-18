@@ -9,7 +9,7 @@ class AddPriceToMoviesTable extends Migration
     public function up()
     {
         Schema::table('movies', function (Blueprint $table) {
-            $table->decimal('price', 8, 2)->after('rating'); // Adds price column after rating
+            $table->decimal('price', 8, 2)->after('rating'); 
         });
     }
 

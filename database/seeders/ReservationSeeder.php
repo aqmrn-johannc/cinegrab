@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Reservation;
 use App\Models\User;
 use App\Models\Movie;
-use Illuminate\Support\Str; // Add this import
+use Illuminate\Support\Str; 
 
 class ReservationSeeder extends Seeder
 {
@@ -23,30 +23,30 @@ class ReservationSeeder extends Seeder
 
         foreach ($movies as $movie) {
             foreach ($users as $user) {
-                // Create reservations for multiple time slots with correct format
-                $timeSlots = ['09:00', '12:00', '15:00']; // Change to match migration enum
+              
+                $timeSlots = ['09:00', '12:00', '15:00']; 
 
                 foreach ($timeSlots as $timeSlot) {
-                    $reservedSeats = []; // Track reserved seats for this movie and time slot
+                    $reservedSeats = [];
 
-                    // Attempt to create multiple reservations
-                    for ($i = 0; $i < 20; $i++) { // Adjust number as needed
+               
+                    for ($i = 0; $i < 20; $i++) { 
                         $seat = $seats[array_rand($seats)];
 
-                        // Ensure the seat hasn't already been reserved for this time slot
+                       
                         if (in_array($seat, $reservedSeats)) {
-                            continue; // Skip to the next iteration if the seat is already taken
+                            continue;
                         }
 
                         Reservation::create([
                             'user_id' => $user->id,
                             'movie_id' => $movie->id,
-                            'time_slot' => $timeSlot, // Use the correct time format
+                            'time_slot' => $timeSlot, 
                             'seat_number' => $seat,
-                            'order_number' => strtoupper(Str::random(10)), // Use Str::random here
+                            'order_number' => strtoupper(Str::random(10)),
                         ]);
 
-                        // Add the seat to the reserved list
+     
                         $reservedSeats[] = $seat;
                     }
                 }

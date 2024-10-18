@@ -3,9 +3,9 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ Auth::check() && Auth::user()->is_admin ? route('admin.dashboard') : route('dashboard') }}">
                         <img src="{{ asset('images/cinegrablogo.png') }}" style="width:200px; height: auto; margin-top:10px;" />
-                    </a>
+                    </a>                    
                 </div>
             </div>
 
@@ -24,9 +24,11 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                            @if(!Auth::user()->is_admin) 
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @endif
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
