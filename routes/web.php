@@ -6,6 +6,9 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReservationController;
 use App\Models\Movie;
 use App\Http\Controllers\ReservationExportController;
+use App\Http\Controllers\NotificationController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,7 +31,13 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); 
 })->name('admin.dashboard')->middleware('auth'); 
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
 Route::get('/admin/dashboard', [ReservationController::class, 'adminDashboard'])->middleware('auth')->name('admin.dashboard');
+
+Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
 
@@ -39,6 +48,14 @@ Route::get('/reservation/{movie}', [ReservationController::class, 'show'])->name
 Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
 
 Route::get('/checkout', [ReservationController::class, 'checkout'])->name('checkout');
+
+Route::get('/admin/movies/create', [MovieController::class, 'create'])->name('movies.create');
+Route::post('/admin/movies', [MovieController::class, 'store'])->name('movies.store');
+
+Route::get('/admin/movies', [MovieController::class, 'index'])->name('movies.index')->middleware('auth');
+
+Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
 
 Route::get('/reservations/export', [ReservationExportController::class, 'export'])->middleware('auth')->name('reservations.export');
 
@@ -54,6 +71,9 @@ Route::get('/admin/dashboard', [ReservationController::class, 'adminDashboard'])
 Route::post('/ban-user/{id}', [ReservationController::class, 'banUser'])->middleware('auth');
 
 Route::post('/unban-user/{id}', [ReservationController::class, 'unbanUser'])->middleware('auth');
+
+Route::post('/reservations/{id}/approve', [ReservationController::class, 'approveReservation'])->name('reservations.approve')->middleware('auth');
+Route::post('/reservations/{id}/deny', [ReservationController::class, 'denyReservation'])->name('reservations.deny')->middleware('auth');
 
 
 
