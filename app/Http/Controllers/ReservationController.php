@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Notifications\ReservationStatusChanged;
+use App\Notifications\ReservationPendingNotification;
 
 class ReservationController extends Controller
 {
@@ -31,38 +33,48 @@ class ReservationController extends Controller
 
         $movie = Movie::find($validatedData['movie_id']);
         $seat = Seat::where('movie_id', $validatedData['movie_id'])
-                    ->where('seat_number', $validatedData['seat'])
-                    ->where('time_slot', $validatedData['time_slot'])
-                    ->first();
+            ->where('seat_number', $validatedData['seat'])
+            ->where('time_slot', $validatedData['time_slot'])
+            ->first();
 
-        if ($seat->is_booked) {
-            return back()->withErrors(['seat' => 'The seat is already booked.']);
+ 
+        if ($seat) {
+            $seat->is_pending = true; 
+            $seat->save();
         }
-
-        $seat->update(['is_booked' => true]);
 
         $orderNumber = 'ORD-' . Str::random(10);
 
-        Reservation::create([
+        $reservation = Reservation::create([
             'movie_id' => $validatedData['movie_id'],
             'seat_number' => $validatedData['seat'],
             'time_slot' => $validatedData['time_slot'],
             'user_id' => auth()->id(),
             'order_number' => $orderNumber,
             'price' => $movie->price,
+            'status' => 'pending', 
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Seat reserved successfully!');
+       
+        $adminUsers = User::where('is_admin', true)->get();
+
+        foreach ($adminUsers as $admin) {
+            $admin->notify(new \App\Notifications\ReservationPendingNotification($reservation));
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Reservation pending approval!');
     }
+
 
     public function getSeatsForTimeSlot($movieId, $timeSlot)
     {
         $seats = Seat::where('movie_id', $movieId)
-                    ->where('time_slot', $timeSlot)
-                    ->get();
-
+                     ->where('time_slot', $timeSlot)
+                     ->get(['seat_number', 'is_booked', 'is_pending']); 
+    
         return response()->json(['seats' => $seats]);
     }
+    
 
     public function destroy($id)
     {
@@ -77,6 +89,7 @@ class ReservationController extends Controller
 
             if ($seat) {
                 $seat->is_booked = false;
+                $seat->is_pending = false;
                 $seat->save();
             }
 
@@ -102,22 +115,27 @@ class ReservationController extends Controller
 
     public function adminDashboard()
     {
-        $reservations = Reservation::with(['movie', 'user'])->get(); // Fetch reservations with movie and user details
+      
+        $movies = Movie::all();
 
-        // Fetch users along with their reservations, excluding the admin account
-        $users = User::with('reservations')->where('email', '!=', 'admin123@gmail.com')->get(); 
+ 
+        $reservations = Reservation::with(['movie', 'user'])->get();
 
-        $totalReservations = $reservations->count(); // Count total reservations
-        $totalUsers = $users->count(); // Count total users
+       
+        $users = User::where('email', '!=', 'admin123@gmail.com')->get();
 
-        return view('admin.dashboard', compact('reservations', 'users', 'totalReservations', 'totalUsers'));
+      
+        $totalReservations = $reservations->count();
+        $totalUsers = $users->count();
+
+       
+        return view('admin.dashboard', compact('movies', 'reservations', 'totalReservations', 'totalUsers', 'users'));
     }
-
 
     public function edit($id)
     {
         $reservation = Reservation::findOrFail($id);
-        $movie = Movie::findOrFail($reservation->movie_id); // Assuming you have a movie_id in the reservation
+        $movie = Movie::findOrFail($reservation->movie_id); 
 
         return view('admin.edit', compact('reservation', 'movie'));
     }
@@ -135,12 +153,12 @@ class ReservationController extends Controller
                     ->where('time_slot', $reservation->time_slot)
                     ->first();
 
-        // If the seat is being changed, mark the old seat as available
+      
         if ($reservation->seat_number !== $validatedData['seat']) {
             $oldSeat->is_booked = false;
             $oldSeat->save();
             
-            // Check if the new seat is booked
+       
             $newSeat = Seat::where('movie_id', $reservation->movie_id)
                         ->where('seat_number', $validatedData['seat'])
                         ->where('time_slot', $validatedData['time_slot'])
@@ -150,14 +168,14 @@ class ReservationController extends Controller
                 return back()->withErrors(['seat' => 'The new seat is already booked.']);
             }
 
-            // Update the new seat to booked
+          
             if ($newSeat) {
                 $newSeat->is_booked = true;
                 $newSeat->save();
             }
         }
 
-        // Update reservation details
+   
         $reservation->update([
             'time_slot' => $validatedData['time_slot'],
             'seat_number' => $validatedData['seat'],
@@ -175,7 +193,7 @@ class ReservationController extends Controller
 
         $user = User::findOrFail($id);
         
-        // Set the banned_until time
+   
         $user->banned_until = now()->addMinutes($request->duration);
         $user->ban_reason = $request->reason;
         $user->save();
@@ -186,12 +204,64 @@ class ReservationController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Remove the ban
-        $user->banned_until = null; // Set banned_until to null
-        $user->ban_reason = null; // Optionally clear the ban reason
+     
+        $user->banned_until = null; 
+        $user->ban_reason = null;
         $user->save();
 
         return response()->json(['success' => true]);
     }
+
+    public function approveReservation($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->status = 'approved';
+        $reservation->save();
+
+       
+        $seat = Seat::where('movie_id', $reservation->movie_id)
+                    ->where('seat_number', $reservation->seat_number)
+                    ->where('time_slot', $reservation->time_slot)
+                    ->first();
+
+        if ($seat) {
+            $seat->is_pending = false; 
+            $seat->is_booked = true;    
+            $seat->save();
+        }
+
+      
+        $user = User::find($reservation->user_id);
+        $user->notify(new ReservationStatusChanged($reservation));
+
+        return redirect()->back()->with('success', 'Reservation approved!');
+    }
+
+
+    public function denyReservation($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->status = 'denied';
+        $reservation->save();
+
+        
+        $seat = Seat::where('movie_id', $reservation->movie_id)
+                    ->where('seat_number', $reservation->seat_number)
+                    ->where('time_slot', $reservation->time_slot)
+                    ->first();
+
+        if ($seat) {
+            $seat->is_pending = true;  
+            $seat->is_booked = false;  
+            $seat->save();
+        }
+
+        
+        $user = User::find($reservation->user_id);
+        $user->notify(new ReservationStatusChanged($reservation));
+
+        return redirect()->back()->with('success', 'Reservation denied!');
+    }
+
 
 }

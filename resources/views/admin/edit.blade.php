@@ -40,7 +40,7 @@
                                 <label for="seat" class="block text-lg font-medium text-white">Choose your seat:</label>
                                 <select id="seat" name="seat" class="mt-1 block w-1/4 bg-gray-500 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
                                     <option value="{{ $reservation->seat_number }}" selected>{{ $reservation->seat_number }}</option>
-                                    <!-- You can dynamically add other options if needed -->
+                
                                 </select>
                             </div>
 
@@ -52,7 +52,7 @@
                     <div class="w-1/2 pl-6">
                         
                         <h3 class="text-lg font-medium text-white">Movie Theatre Layout</h3>
-                                    <!-- Legend -->
+                                  
                         <div class="mt-1">
                             <h4 class="text-lg font-medium text-white">Legend</h4>
                             <div class="flex items-center">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-10 gap-1 overflow-y-auto h-96" id="seat-layout">
-                            <!-- Seat layout will be dynamically populated here -->
+                            
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
             const seatSelect = document.getElementById('seat');
             const seatLayout = document.getElementById('seat-layout');
             const movieId = {{ $movie->id }};
-            const selectedTimeSlot = '{{ $reservation->time_slot }}'; // Pre-selected time slot
+            const selectedTimeSlot = '{{ $reservation->time_slot }}'; 
 
             function fetchSeats(timeSlot) {
                 fetch(`/movies/${movieId}/seats/${timeSlot}`)
@@ -95,9 +95,9 @@
                             option.disabled = seat.is_booked;
 
                             if (seat.is_booked) {
-                                option.style.color = 'yellow'; // reserved seats
+                                option.style.color = 'yellow';
                             } else {
-                                option.style.color = 'white'; // available seats
+                                option.style.color = 'white'; 
                             }
 
                             seatSelect.appendChild(option);
@@ -119,10 +119,10 @@
                     });
             }
 
-            // Fetch seats for the pre-selected time slot
+           
             fetchSeats(selectedTimeSlot);
 
-            // Update seats on time slot change
+           
             timeSlots.forEach(slot => {
                 slot.addEventListener('change', function () {
                     fetchSeats(this.value);

@@ -11,6 +11,64 @@
 
             <div class="flex items-center">
                 @if(Auth::check())
+                <!-- User Notifications Icon -->
+                @if(!Auth::user()->is_admin)
+                <div class="relative mr-4">
+                    <button id="user-notification-button" class="flex items-center">
+                        <img src="{{ asset('images/bell.png') }}" alt="Notifications" class="h-6 w-6 hover:opacity-75">
+                        <span id="user-notification-count" class="absolute top-0 right-0 -mr-1 -mt-1 bg-red-500 text-white rounded-full px-1 text-xs {{ auth()->user()->unreadNotifications->count() == 0 ? 'hidden' : '' }}">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </span>                            
+                    </button>
+                    <div id="user-notification-dropdown" class="absolute right-0 w-72 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg hidden">
+                        <div id="user-notification-list" class="py-2">
+                            @if(auth()->user()->notifications->isEmpty())
+                                <div class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                                    You have no notifications.
+                                </div>
+                            @else
+                                @foreach(auth()->user()->notifications as $notification)
+                                    <div class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                                        Your reservation for <strong>{{ $notification->data['movie_title'] }}</strong> (Seat ID: <strong>{{ $notification->data['seat_number'] }}</strong>) has been <strong>{{ $notification->data['status'] }}</strong>.
+                                        <span class="text-gray-500 text-xs"> {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>                                     
+                </div>
+                @endif
+
+                <!-- Notifications Icon for Admin -->
+                @if(Auth::user()->is_admin)
+                    @if(Auth::check() && Auth::user()->is_admin)
+                    <div class="relative mr-4">
+                        <button id="admin-notification-button" class="flex items-center">
+                            <img src="{{ asset('images/bell.png') }}" alt="Notifications" class="h-6 w-6 hover:opacity-75">
+                            <span id="admin-notification-count" class="absolute top-0 right-0 -mr-1 -mt-1 bg-red-500 text-white rounded-full px-1 text-xs {{ auth()->user()->unreadNotifications->count() == 0 ? 'hidden' : '' }}">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        </button>
+                        <div id="admin-notification-dropdown" class="absolute right-0 w-72 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg hidden">
+                            <div id="admin-notification-list" class="py-2">
+                                @if(auth()->user()->notifications->isEmpty())
+                                    <div class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                                        You have no notifications.
+                                    </div>
+                                @else
+                                    @foreach(auth()->user()->notifications as $notification)
+                                        <div class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                                            {{ $notification->data['message'] }}
+                                            <span class="text-gray-500 text-xs"> {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>                        
+                    </div>
+                    @endif
+                @endif
+
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -24,11 +82,9 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            @if(!Auth::user()->is_admin) 
-                                <x-dropdown-link :href="route('profile.edit')">
-                                    {{ __('Profile') }}
-                                </x-dropdown-link>
-                            @endif
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -54,3 +110,74 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Admin notifications handling
+        const adminNotificationButton = document.getElementById('admin-notification-button');
+        const adminNotificationDropdown = document.getElementById('admin-notification-dropdown');
+        const adminNotificationCount = document.getElementById('admin-notification-count');
+
+        // Show admin notification count
+        @if(Auth::check() && Auth::user()->is_admin)
+            const adminUnreadCount = @json(auth()->user()->unreadNotifications->count());
+            if (adminUnreadCount > 0) {
+                adminNotificationCount.textContent = adminUnreadCount;
+            } else {
+                adminNotificationCount.classList.add('hidden');
+            }
+        @endif
+
+        // Toggle admin notification dropdown and mark as read
+        adminNotificationButton?.addEventListener('click', () => {
+            adminNotificationDropdown.classList.toggle('hidden');
+
+            if (adminNotificationCount.textContent !== '') {
+                fetch("{{ route('notifications.markAsRead') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        adminNotificationCount.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        // User notifications handling
+        const userNotificationButton = document.getElementById('user-notification-button');
+        const userNotificationDropdown = document.getElementById('user-notification-dropdown');
+        const userNotificationCount = document.getElementById('user-notification-count');
+
+        // Toggle user notification dropdown and mark as read
+        userNotificationButton?.addEventListener('click', () => {
+            userNotificationDropdown.classList.toggle('hidden');
+
+            if (userNotificationCount.textContent !== '') {
+                fetch("{{ route('notifications.markAsRead') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        userNotificationCount.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
+

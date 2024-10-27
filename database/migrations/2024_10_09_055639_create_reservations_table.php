@@ -15,7 +15,7 @@ class CreateReservationsTable extends Migration
             $table->enum('time_slot', ['09:00', '12:00', '15:00']); 
             $table->string('order_number')->nullable();
             $table->string('user_name')->nullable(); 
-            $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('price', 8, 2)->default(100);
             $table->timestamps();
         });
     }

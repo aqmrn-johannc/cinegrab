@@ -10,11 +10,12 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',  // Add other fields you're mass assigning
+        'user_id',  
         'movie_id', 
         'seat_number', 
-        'time_slot',  // Include other fields from your form
+        'time_slot',  
         'order_number',
+        'status',
     ];
     public function user()
     {
